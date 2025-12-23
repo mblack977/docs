@@ -1,0 +1,154 @@
+---
+title: 'Query a Knowledge Base'
+description: 'Send questions and receive answers with citations'
+api: 'POST /kb/{kb_id}/query'
+---
+
+## Endpoint
+
+```
+POST https://api.ardie.ai/kb/{kb_id}/query
+```
+
+## Path Parameters
+
+<ParamField path="kb_id" type="string" required>
+  The unique identifier of the knowledge base to query.
+</ParamField>
+
+## Request Headers
+
+<ParamField header="Authorization" type="string" required>
+  Bearer token with your API key: `Bearer YOUR_API_KEY`
+</ParamField>
+
+<ParamField header="Content-Type" type="string" required>
+  Must be `application/json`
+</ParamField>
+
+## Request Body
+
+<ParamField body="query" type="string" required>
+  The question or search query to send to the knowledge base.
+</ParamField>
+
+## Example Request
+
+<CodeGroup>
+```bash cURL
+curl -X POST https://api.ardie.ai/kb/kb_edu_123/query \
+  -H "Authorization: Bearer ardie_sk_live_abc123" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "query": "What are the key curriculum standards for grade 5 math?"
+  }'
+```
+
+```python Python
+import requests
+
+response = requests.post(
+    "https://api.ardie.ai/kb/kb_edu_123/query",
+    headers={
+        "Authorization": "Bearer ardie_sk_live_abc123",
+        "Content-Type": "application/json"
+    },
+    json={
+        "query": "What are the key curriculum standards for grade 5 math?"
+    }
+)
+
+data = response.json()
+print(data["answer"])
+```
+
+```javascript JavaScript
+const response = await fetch('https://api.ardie.ai/kb/kb_edu_123/query', {
+  method: 'POST',
+  headers: {
+    'Authorization': 'Bearer ardie_sk_live_abc123',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    query: 'What are the key curriculum standards for grade 5 math?'
+  })
+});
+
+const data = await response.json();
+console.log(data.answer);
+```
+</CodeGroup>
+
+## Response
+
+<ResponseField name="answer" type="string">
+  The generated answer to your query based on the knowledge base content.
+</ResponseField>
+
+<ResponseField name="citations" type="array">
+  List of source documents that support the answer.
+  
+  <Expandable title="Citation object">
+    <ResponseField name="document_id" type="string">
+      Unique identifier of the source document.
+    </ResponseField>
+    <ResponseField name="title" type="string">
+      Title of the source document.
+    </ResponseField>
+    <ResponseField name="excerpt" type="string">
+      Relevant excerpt from the document.
+    </ResponseField>
+    <ResponseField name="page" type="integer">
+      Page number where the information was found (if applicable).
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<ResponseField name="tokens_used" type="integer">
+  Number of tokens consumed by this query.
+</ResponseField>
+
+## Example Response
+
+```json
+{
+  "answer": "The key curriculum standards for grade 5 math include operations with fractions, understanding of place value to the thousandths, and introduction to coordinate geometry. Students should be able to add and subtract fractions with unlike denominators, multiply and divide fractions, and understand the relationship between fractions and decimals.",
+  "citations": [
+    {
+      "document_id": "doc_123",
+      "title": "Common Core Math Standards",
+      "excerpt": "Students should be able to add and subtract fractions with unlike denominators (including mixed numbers) by replacing given fractions with equivalent fractions...",
+      "page": 42
+    },
+    {
+      "document_id": "doc_456",
+      "title": "Grade 5 Mathematics Framework",
+      "excerpt": "Place value understanding extends to the thousandths place, with students reading, writing, and comparing decimals...",
+      "page": 15
+    }
+  ],
+  "tokens_used": 150
+}
+```
+
+## Error Responses
+
+| Status | Error | Description |
+|--------|-------|-------------|
+| `400` | `invalid_query` | Query is empty or malformed |
+| `401` | `unauthorized` | Missing or invalid API key |
+| `403` | `forbidden` | Key doesn't have access to this KB |
+| `429` | `query_cap_exceeded` | Monthly query limit reached |
+| `429` | `rate_limit_exceeded` | Too many requests per minute |
+| `500` | `internal_error` | Server error, retry later |
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Rate Limits" icon="gauge" href="/api-reference/rate-limits">
+    Understand usage caps
+  </Card>
+  <Card title="Error Handling" icon="triangle-exclamation" href="/api-reference/error-handling">
+    Handle errors gracefully
+  </Card>
+</CardGroup>

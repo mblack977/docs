@@ -1,33 +1,53 @@
 ---
-title: 'Introduction'
-description: 'Example section for showcasing API endpoints'
+title: 'API Introduction'
+description: 'Learn how to integrate with the Ardie API'
 ---
 
-<Note>
-  If you're not looking to build API reference documentation, you can delete
-  this section by removing the api-reference folder.
-</Note>
+## Overview
 
-## Welcome
+The Ardie API allows you to query knowledge bases programmatically. All interactions happen through REST endpoints using JSON payloads.
 
-There are two ways to build API documentation: [OpenAPI](https://mintlify.com/docs/api-playground/openapi/setup) and [MDX components](https://mintlify.com/docs/api-playground/mdx/configuration). For the starter kit, we are using the following OpenAPI specification.
-
-<Card
-  title="Plant Store Endpoints"
-  icon="leaf"
-  href="https://github.com/mintlify/starter/blob/main/api-reference/openapi.json"
->
-  View the OpenAPI specification file
-</Card>
-
-## Authentication
-
-All API endpoints are authenticated using Bearer tokens and picked up from the specification file.
-
-```json
-"security": [
-  {
-    "bearerAuth": []
-  }
-]
+**Base URL:**
 ```
+https://api.ardie.ai
+```
+
+## How API Exchange Works
+
+Ardie acts as a secure intermediary between you and knowledge base publishers:
+
+1. You purchase access to a knowledge base through the marketplace
+2. Ardie issues you a **scoped API key** for that specific knowledge base
+3. You use the key to query the knowledge base via the Ardie API
+4. Ardie routes your query to the publisher's infrastructure and returns the response
+
+<Info>
+  **Key principle:** Buyers never receive supplier infrastructure keys. All keys are Ardie-issued, scoped, and revocable.
+</Info>
+
+## Available Endpoints
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/kb/{kb_id}/query` | POST | Query a knowledge base |
+| `/api/marketplace/knowledge-bases` | GET | List available knowledge bases |
+
+## Quick Example
+
+```bash
+curl -X POST https://api.ardie.ai/kb/{kb_id}/query \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"query": "What are the key curriculum standards for grade 5 math?"}'
+```
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Authentication" icon="lock" href="/api-reference/authentication">
+    Learn how to authenticate your requests
+  </Card>
+  <Card title="Query Endpoint" icon="terminal" href="/api-reference/endpoints/query">
+    Make your first query
+  </Card>
+</CardGroup>

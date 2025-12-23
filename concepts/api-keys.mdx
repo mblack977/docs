@@ -1,0 +1,78 @@
+---
+title: "API Keys"
+description: "How Ardie's scoped API keys work"
+---
+
+## How API Keys Work
+
+When you purchase access to a knowledge base, Ardie issues you a **scoped API key**. This key is your credential for querying that specific knowledge base via the API.
+
+## Key Principles
+
+<CardGroup cols={1}>
+  <Card title="Ardie-Issued" icon="shield-check">
+    All API keys are issued by Ardie. You never receive supplier infrastructure keys or direct access to publisher systems.
+  </Card>
+  <Card title="Scoped Access" icon="lock">
+    Each key grants access to exactly one knowledge base. If you purchase access to multiple knowledge bases, you'll have separate keys for each.
+  </Card>
+  <Card title="Revocable" icon="ban">
+    Keys can be revoked at any time from your dashboard if compromised or no longer needed.
+  </Card>
+</CardGroup>
+
+## API Key Format
+
+Your API key will look something like:
+
+```
+ardie_sk_live_abc123xyz789...
+```
+
+The prefix indicates:
+- `ardie_` — Issued by Ardie
+- `sk_` — Secret key (keep confidential)
+- `live_` — Production key (vs `test_` for sandbox)
+
+## Managing Your Keys
+
+Access your API keys from the [Dashboard](https://ardie.ai/dashboard). For each key, you can see:
+
+| Field | Description |
+|-------|-------------|
+| **Knowledge Base** | Which KB this key grants access to |
+| **Created At** | When the key was issued |
+| **Last Used** | Most recent API call with this key |
+| **Prefix** | First few characters for identification |
+
+<Warning>
+  **Never expose your API key in client-side code, public repositories, or logs.** Treat it like a password.
+</Warning>
+
+## Security Best Practices
+
+<Steps>
+  <Step title="Use Environment Variables">
+    Store your API key in environment variables, not in code:
+    ```bash
+    export ARDIE_API_KEY="ardie_sk_live_..."
+    ```
+  </Step>
+  <Step title="Rotate Keys Periodically">
+    If you suspect a key may be compromised, revoke it immediately and generate a new one.
+  </Step>
+  <Step title="Use Server-Side Only">
+    Make API calls from your backend server, never from browser JavaScript or mobile apps.
+  </Step>
+</Steps>
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Authentication" icon="lock" href="/api-reference/authentication">
+    Learn how to use your API key in requests
+  </Card>
+  <Card title="Rate Limits" icon="gauge" href="/api-reference/rate-limits">
+    Understand usage caps and limits
+  </Card>
+</CardGroup>

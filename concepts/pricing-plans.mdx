@@ -1,0 +1,86 @@
+---
+title: "Pricing & Plans"
+description: "Understanding Ardie's prepaid usage model"
+---
+
+## Prepaid Usage Model
+
+Ardie uses a **prepaid usage model**. When you purchase access to a knowledge base, you select a plan that includes a fixed number of queries per billing period.
+
+<Info>
+  This model ensures transparent pricing with no surprise bills. You always know exactly how many queries you have available.
+</Info>
+
+## How Plans Work
+
+Each knowledge base publisher sets their own pricing tiers. A typical knowledge base might offer:
+
+| Plan | Price | Queries Included | Best For |
+|------|-------|------------------|----------|
+| **Starter** | $29/mo | 100 queries | Testing and evaluation |
+| **Professional** | $99/mo | 500 queries | Regular usage |
+| **Enterprise** | $299/mo | 2,000 queries | High-volume applications |
+
+## What Counts as a Query?
+
+A **query** is a single API call to the `/kb/{kb_id}/query` endpoint. Each query:
+
+- Counts as 1 against your plan's query limit
+- Returns an answer with citations
+- Reports `tokens_used` in the response
+
+<Note>
+  Failed requests (4xx/5xx errors) do not count against your query limit.
+</Note>
+
+## Monitoring Usage
+
+Track your usage in real-time from the [Dashboard](https://ardie.ai/dashboard):
+
+- **Queries Used** — How many queries you've made this period
+- **Queries Remaining** — How many queries are left
+- **Usage Percentage** — Visual progress toward your cap
+
+## What Happens at the Cap?
+
+When you reach your query limit:
+
+1. API requests return `429 Too Many Requests`
+2. The response includes your current usage and cap
+3. You can upgrade your plan or wait for the next billing period
+
+```json
+{
+  "error": "query_cap_exceeded",
+  "message": "You have exceeded your monthly query cap of 500 queries.",
+  "usage": {
+    "used": 500,
+    "cap": 500
+  },
+  "upgrade_url": "https://ardie.ai/billing"
+}
+```
+
+## Upgrading Plans
+
+You can upgrade your plan at any time:
+
+1. Go to your [Dashboard](https://ardie.ai/dashboard)
+2. Find the knowledge base subscription
+3. Click **Upgrade Plan**
+4. Select a higher tier
+
+<Tip>
+  Upgrades take effect immediately. Your new query limit is available right away.
+</Tip>
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Purchase Access" icon="credit-card" href="/marketplace/purchasing">
+    Learn how to buy access to a knowledge base
+  </Card>
+  <Card title="Rate Limits" icon="gauge" href="/api-reference/rate-limits">
+    Understand rate limiting and caps
+  </Card>
+</CardGroup>

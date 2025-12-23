@@ -1,0 +1,242 @@
+---
+title: 'Error Handling'
+description: 'Handle API errors gracefully in your application'
+---
+
+## Error Response Format
+
+All API errors return a consistent JSON structure:
+
+```json
+{
+  "error": "error_code",
+  "message": "Human-readable description of the error."
+}
+```
+
+Some errors include additional fields with context-specific information.
+
+## HTTP Status Codes
+
+| Status | Category | Description |
+|--------|----------|-------------|
+| `400` | Client Error | Bad request - check your request format |
+| `401` | Authentication | Missing or invalid API key |
+| `403` | Authorization | Key doesn't have access to this resource |
+| `404` | Not Found | Knowledge base or resource doesn't exist |
+| `429` | Rate Limit | Too many requests or cap exceeded |
+| `500` | Server Error | Internal error - retry later |
+| `503` | Unavailable | Service temporarily unavailable |
+
+## Common Errors
+
+### Authentication Errors (401)
+
+```json
+{
+  "error": "missing_api_key",
+  "message": "No Authorization header provided."
+}
+```
+
+```json
+{
+  "error": "invalid_api_key",
+  "message": "The provided API key is invalid or has been revoked."
+}
+```
+
+**Fix:** Ensure you're including a valid API key in the `Authorization: Bearer` header.
+
+### Authorization Errors (403)
+
+```json
+{
+  "error": "key_scope_mismatch",
+  "message": "This API key does not have access to the requested knowledge base."
+}
+```
+
+```json
+{
+  "error": "key_revoked",
+  "message": "This API key has been revoked."
+}
+```
+
+**Fix:** Use the correct API key for the knowledge base you're querying.
+
+### Not Found Errors (404)
+
+```json
+{
+  "error": "knowledge_base_not_found",
+  "message": "No knowledge base found with ID 'kb_invalid_123'."
+}
+```
+
+**Fix:** Verify the knowledge base ID is correct.
+
+### Rate Limit Errors (429)
+
+```json
+{
+  "error": "rate_limit_exceeded",
+  "message": "Too many requests. Please wait before retrying.",
+  "retry_after": 15
+}
+```
+
+```json
+{
+  "error": "query_cap_exceeded",
+  "message": "You have exceeded your monthly query cap of 500 queries.",
+  "usage": {
+    "used": 500,
+    "cap": 500
+  },
+  "upgrade_url": "https://ardie.ai/billing"
+}
+```
+
+**Fix:** For rate limits, implement backoff and retry. For cap exceeded, upgrade your plan.
+
+### Validation Errors (400)
+
+```json
+{
+  "error": "invalid_query",
+  "message": "Query cannot be empty."
+}
+```
+
+```json
+{
+  "error": "invalid_request",
+  "message": "Request body must be valid JSON."
+}
+```
+
+**Fix:** Check your request format and ensure all required fields are present.
+
+### Server Errors (500, 503)
+
+```json
+{
+  "error": "internal_error",
+  "message": "An unexpected error occurred. Please try again later."
+}
+```
+
+**Fix:** Retry with exponential backoff. If persistent, contact support.
+
+## Error Handling Best Practices
+
+<Steps>
+  <Step title="Check Status Codes First">
+    Always check the HTTP status code before parsing the response body.
+  </Step>
+  <Step title="Parse Error Response">
+    Extract the `error` code and `message` for logging and user feedback.
+  </Step>
+  <Step title="Implement Retry Logic">
+    For `429` and `5xx` errors, implement exponential backoff with jitter.
+  </Step>
+  <Step title="Handle Cap Exceeded Gracefully">
+    When `query_cap_exceeded`, inform users and provide upgrade options.
+  </Step>
+  <Step title="Log Errors">
+    Log error details for debugging, but never log API keys.
+  </Step>
+</Steps>
+
+## Example Error Handler
+
+<CodeGroup>
+```python Python
+class ArdieAPIError(Exception):
+    def __init__(self, status_code, error_code, message):
+        self.status_code = status_code
+        self.error_code = error_code
+        self.message = message
+        super().__init__(f"{error_code}: {message}")
+
+def handle_response(response):
+    if response.ok:
+        return response.json()
+    
+    try:
+        error_data = response.json()
+    except:
+        error_data = {"error": "unknown", "message": response.text}
+    
+    raise ArdieAPIError(
+        status_code=response.status_code,
+        error_code=error_data.get("error", "unknown"),
+        message=error_data.get("message", "Unknown error")
+    )
+
+# Usage
+try:
+    result = handle_response(response)
+except ArdieAPIError as e:
+    if e.error_code == "query_cap_exceeded":
+        print("Please upgrade your plan to continue.")
+    elif e.error_code == "rate_limit_exceeded":
+        print("Too many requests. Retrying...")
+    else:
+        print(f"API Error: {e.message}")
+```
+
+```javascript JavaScript
+class ArdieAPIError extends Error {
+  constructor(statusCode, errorCode, message) {
+    super(`${errorCode}: ${message}`);
+    this.statusCode = statusCode;
+    this.errorCode = errorCode;
+  }
+}
+
+async function handleResponse(response) {
+  if (response.ok) {
+    return response.json();
+  }
+  
+  let errorData;
+  try {
+    errorData = await response.json();
+  } catch {
+    errorData = { error: 'unknown', message: response.statusText };
+  }
+  
+  throw new ArdieAPIError(
+    response.status,
+    errorData.error || 'unknown',
+    errorData.message || 'Unknown error'
+  );
+}
+
+// Usage
+try {
+  const result = await handleResponse(response);
+} catch (e) {
+  if (e instanceof ArdieAPIError) {
+    if (e.errorCode === 'query_cap_exceeded') {
+      console.log('Please upgrade your plan to continue.');
+    } else if (e.errorCode === 'rate_limit_exceeded') {
+      console.log('Too many requests. Retrying...');
+    } else {
+      console.log(`API Error: ${e.message}`);
+    }
+  }
+}
+```
+</CodeGroup>
+
+## Need Help?
+
+If you encounter persistent errors or unexpected behavior, contact support at [support@ardie.ai](mailto:support@ardie.ai) with:
+
+- The error code and message
+- Your request details (without the API key)
+- Timestamp of the error

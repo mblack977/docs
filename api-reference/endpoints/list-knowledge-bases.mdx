@@ -1,0 +1,178 @@
+---
+title: 'List Knowledge Bases'
+description: 'Browse and search available knowledge bases'
+api: 'GET /api/marketplace/knowledge-bases'
+---
+
+## Endpoint
+
+```
+GET https://api.ardie.ai/api/marketplace/knowledge-bases
+```
+
+<Note>
+  This endpoint is publicly accessible and does not require authentication.
+</Note>
+
+## Query Parameters
+
+<ParamField query="query" type="string">
+  Search term to filter knowledge bases by title, description, or publisher.
+</ParamField>
+
+<ParamField query="category" type="string">
+  Filter by category. Options: `education`, `policy`, `health`, `research`, `legal`
+</ParamField>
+
+<ParamField query="tags" type="string[]">
+  Filter by one or more tags.
+</ParamField>
+
+<ParamField query="sort" type="string" default="popular">
+  Sort order. Options: `popular`, `new`, `updated`
+</ParamField>
+
+<ParamField query="page" type="integer" default="1">
+  Page number for pagination.
+</ParamField>
+
+<ParamField query="pageSize" type="integer" default="12">
+  Number of results per page (max 50).
+</ParamField>
+
+## Example Request
+
+<CodeGroup>
+```bash cURL
+curl "https://api.ardie.ai/api/marketplace/knowledge-bases?query=education&category=education&sort=popular&page=1&pageSize=12"
+```
+
+```python Python
+import requests
+
+response = requests.get(
+    "https://api.ardie.ai/api/marketplace/knowledge-bases",
+    params={
+        "query": "education",
+        "category": "education",
+        "sort": "popular",
+        "page": 1,
+        "pageSize": 12
+    }
+)
+
+data = response.json()
+for kb in data["items"]:
+    print(kb["title"])
+```
+
+```javascript JavaScript
+const params = new URLSearchParams({
+  query: 'education',
+  category: 'education',
+  sort: 'popular',
+  page: '1',
+  pageSize: '12'
+});
+
+const response = await fetch(
+  `https://api.ardie.ai/api/marketplace/knowledge-bases?${params}`
+);
+
+const data = await response.json();
+data.items.forEach(kb => console.log(kb.title));
+```
+</CodeGroup>
+
+## Response
+
+<ResponseField name="items" type="array">
+  List of knowledge base objects.
+  
+  <Expandable title="Knowledge Base object">
+    <ResponseField name="id" type="string">
+      Unique identifier for the knowledge base.
+    </ResponseField>
+    <ResponseField name="title" type="string">
+      Name of the knowledge base.
+    </ResponseField>
+    <ResponseField name="publisher" type="string">
+      Organization or individual who created the knowledge base.
+    </ResponseField>
+    <ResponseField name="summary" type="string">
+      Brief description of the knowledge base.
+    </ResponseField>
+    <ResponseField name="category" type="string">
+      Primary category classification.
+    </ResponseField>
+    <ResponseField name="tags" type="string[]">
+      List of tags for filtering.
+    </ResponseField>
+    <ResponseField name="subscribersCount" type="integer">
+      Number of users with active subscriptions.
+    </ResponseField>
+    <ResponseField name="queryVolume" type="integer">
+      Total queries processed.
+    </ResponseField>
+    <ResponseField name="updatedAt" type="string">
+      ISO 8601 timestamp of last update.
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<ResponseField name="total" type="integer">
+  Total number of matching knowledge bases.
+</ResponseField>
+
+<ResponseField name="page" type="integer">
+  Current page number.
+</ResponseField>
+
+<ResponseField name="pageSize" type="integer">
+  Number of results per page.
+</ResponseField>
+
+<ResponseField name="totalPages" type="integer">
+  Total number of pages available.
+</ResponseField>
+
+## Example Response
+
+```json
+{
+  "items": [
+    {
+      "id": "kb_edu_123",
+      "title": "K-12 Curriculum Standards",
+      "publisher": "Education Standards Board",
+      "summary": "Comprehensive curriculum standards for K-12 education across all subjects.",
+      "category": "education",
+      "tags": ["curriculum", "k-12", "standards"],
+      "subscribersCount": 245,
+      "queryVolume": 15420,
+      "updatedAt": "2024-01-15T10:30:00Z"
+    },
+    {
+      "id": "kb_edu_456",
+      "title": "Higher Education Research",
+      "publisher": "Academic Research Institute",
+      "summary": "Research papers and studies on higher education pedagogy.",
+      "category": "education",
+      "tags": ["higher-ed", "research", "pedagogy"],
+      "subscribersCount": 89,
+      "queryVolume": 4230,
+      "updatedAt": "2024-01-10T14:20:00Z"
+    }
+  ],
+  "total": 24,
+  "page": 1,
+  "pageSize": 12,
+  "totalPages": 2
+}
+```
+
+## Next Steps
+
+<Card title="Query a Knowledge Base" icon="terminal" href="/api-reference/endpoints/query">
+  Once you've found a knowledge base, learn how to query it.
+</Card>

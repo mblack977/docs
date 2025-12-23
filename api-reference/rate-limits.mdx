@@ -1,0 +1,168 @@
+---
+title: 'Rate Limits'
+description: 'Understanding rate limits and usage caps'
+---
+
+## Two Types of Limits
+
+Ardie enforces two types of limits on API usage:
+
+1. **Rate Limits** — Requests per minute
+2. **Usage Caps** — Total queries per billing period
+
+## Rate Limits
+
+To ensure fair usage and system stability, API requests are rate-limited:
+
+| Limit | Value |
+|-------|-------|
+| Requests per minute | 60 |
+| Per API key | Yes |
+
+<Note>
+  Rate limits are applied per API key, not per account. If you have multiple keys, each has its own rate limit.
+</Note>
+
+### Rate Limit Headers
+
+Every response includes headers showing your rate limit status:
+
+```
+X-RateLimit-Limit: 60
+X-RateLimit-Remaining: 45
+X-RateLimit-Reset: 1704067200
+```
+
+| Header | Description |
+|--------|-------------|
+| `X-RateLimit-Limit` | Maximum requests per minute |
+| `X-RateLimit-Remaining` | Requests remaining in current window |
+| `X-RateLimit-Reset` | Unix timestamp when the limit resets |
+
+### Rate Limit Exceeded
+
+When you exceed the rate limit:
+
+```json
+{
+  "error": "rate_limit_exceeded",
+  "message": "Too many requests. Please wait before retrying.",
+  "retry_after": 15
+}
+```
+
+**Best practice:** Implement exponential backoff when you receive a `429` response.
+
+## Usage Caps
+
+Your plan includes a fixed number of queries per billing period. This is a **hard cap**—when reached, requests are rejected until the next period or you upgrade.
+
+### Checking Your Usage
+
+Monitor usage via the Dashboard or check the response headers:
+
+```
+X-Usage-Used: 450
+X-Usage-Cap: 500
+X-Usage-Remaining: 50
+```
+
+### Cap Exceeded Response
+
+When you hit your query cap:
+
+```json
+{
+  "error": "query_cap_exceeded",
+  "message": "You have exceeded your monthly query cap of 500 queries.",
+  "usage": {
+    "used": 500,
+    "cap": 500
+  },
+  "upgrade_url": "https://ardie.ai/billing"
+}
+```
+
+## Handling Limits in Code
+
+<CodeGroup>
+```python Python
+import time
+import requests
+
+def query_with_retry(kb_id, query, api_key, max_retries=3):
+    url = f"https://api.ardie.ai/kb/{kb_id}/query"
+    headers = {
+        "Authorization": f"Bearer {api_key}",
+        "Content-Type": "application/json"
+    }
+    
+    for attempt in range(max_retries):
+        response = requests.post(url, headers=headers, json={"query": query})
+        
+        if response.status_code == 200:
+            return response.json()
+        
+        if response.status_code == 429:
+            error = response.json()
+            if error.get("error") == "query_cap_exceeded":
+                raise Exception("Query cap exceeded. Upgrade your plan.")
+            
+            # Rate limited - wait and retry
+            retry_after = error.get("retry_after", 2 ** attempt)
+            time.sleep(retry_after)
+            continue
+        
+        response.raise_for_status()
+    
+    raise Exception("Max retries exceeded")
+```
+
+```javascript JavaScript
+async function queryWithRetry(kbId, query, apiKey, maxRetries = 3) {
+  const url = `https://api.ardie.ai/kb/${kbId}/query`;
+  
+  for (let attempt = 0; attempt < maxRetries; attempt++) {
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${apiKey}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ query })
+    });
+    
+    if (response.ok) {
+      return response.json();
+    }
+    
+    if (response.status === 429) {
+      const error = await response.json();
+      if (error.error === 'query_cap_exceeded') {
+        throw new Error('Query cap exceeded. Upgrade your plan.');
+      }
+      
+      // Rate limited - wait and retry
+      const retryAfter = error.retry_after || Math.pow(2, attempt);
+      await new Promise(r => setTimeout(r, retryAfter * 1000));
+      continue;
+    }
+    
+    throw new Error(`Request failed: ${response.status}`);
+  }
+  
+  throw new Error('Max retries exceeded');
+}
+```
+</CodeGroup>
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Error Handling" icon="triangle-exclamation" href="/api-reference/error-handling">
+    Handle all error types gracefully
+  </Card>
+  <Card title="Pricing Plans" icon="credit-card" href="/concepts/pricing-plans">
+    Upgrade for more queries
+  </Card>
+</CardGroup>
