@@ -13,7 +13,7 @@
       "dark": "#A8875C"
     }
   },
-  "favicon": "/favicon.svg",
+  "favicon": "/images/Ardie Favicon(1).png",
   "navigation": {
     "tabs": [
       {
@@ -86,8 +86,8 @@
     }
   },
   "logo": {
-    "light": "/logo/ardie-light.svg",
-    "dark": "/logo/ardie-dark.svg"
+    "light": "/logo/Ardie logo light.png",
+    "dark": "/logo/Ardie logo dark.png"
   },
   "navbar": {
     "links": [
