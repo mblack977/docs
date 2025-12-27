@@ -1,0 +1,130 @@
+---
+title: "What is RAG?"
+sidebarTitle: "What is RAG?"
+description: "Retrieval-Augmented Generation allows AI to retrieve information from a knowledge base and generate responses grounded in real documents, improving accuracy, transparency, and control."
+---
+
+## What is Retrieval-Augmented Generation (RAG)?
+
+Retrieval-Augmented Generation, usually shortened to **RAG**, is a way of combining your own knowledge with AI language models so answers are based on real information, not guesswork.
+
+Instead of asking an AI to rely only on what it remembers from training, RAG allows the AI to **look things up in a trusted knowledge base first**, then generate a response using that information.
+
+<Note>
+**In simple terms:** RAG lets AI read your documents before it answers.
+</Note>
+
+## Why RAG Exists
+
+Large language models are very good at writing text, but they have three important limitations:
+
+- They **do not automatically know** your documents
+- They can **confidently say things that are wrong**
+- They **cannot easily show** where information came from
+
+RAG was developed to solve these problems by grounding AI responses in retrieved source material rather than memory alone.
+
+## How RAG Works (Step by Step)
+
+At a high level, RAG follows a simple process:
+
+<Steps>
+  <Step title="You create a knowledge base">
+    Documents such as PDFs, reports, policies, or articles are uploaded and converted into a searchable format.
+  </Step>
+  <Step title="The system retrieves relevant information">
+    When a question is asked, the system searches the knowledge base to find the most relevant passages.
+  </Step>
+  <Step title="The AI generates an answer">
+    The AI uses the retrieved passages as context and writes a response based on them.
+  </Step>
+  <Step title="Sources can be shown">
+    Because the answer is based on retrieved documents, it is possible to show where the information came from.
+  </Step>
+</Steps>
+
+## How RAG is Different from a Normal Chatbot
+
+<Columns cols={2}>
+  <Card title="Standard Chatbot" icon="robot">
+    - Relies mostly on its training data
+    - Cannot see your private documents
+    - May sound confident even when incorrect
+  </Card>
+  <Card title="RAG-Based System" icon="brain-circuit">
+    - Actively retrieves relevant documents
+    - Grounds answers in real sources
+    - Can be updated by changing the knowledge base
+    - Reduces hallucinations and factual errors
+  </Card>
+</Columns>
+
+This difference is important for **research, policy, education, legal, and organisational use**, where accuracy matters.
+
+## What Makes RAG Powerful
+
+<CardGroup cols={2}>
+  <Card title="Uses Up-to-Date Information" icon="clock">
+    You can update or replace documents without retraining the AI model.
+  </Card>
+  <Card title="Improves Accuracy" icon="bullseye">
+    Answers are constrained by retrieved evidence, which significantly reduces fabricated responses.
+  </Card>
+  <Card title="Supports Transparency" icon="eye">
+    Retrieved sources can be inspected, cited, or audited.
+  </Card>
+  <Card title="Separates Knowledge from AI" icon="layer-group">
+    The same knowledge base can be reused across websites, internal tools, chat interfaces, research workflows, and automated systems.
+  </Card>
+</CardGroup>
+
+This separation is a core advantage highlighted in the original RAG research.
+
+## What RAG is Not
+
+<Warning>
+RAG is **not**:
+- A chatbot product
+- A single AI model
+- A replacement for human expertise
+
+RAG is a **method** for connecting AI systems to structured knowledge in a controlled way.
+</Warning>
+
+## Why Ardie Uses RAG
+
+Ardie is built around the idea that knowledge should be **reusable, governable, and independent** of any single interface.
+
+Using RAG allows Ardie to:
+
+- Turn documents into durable knowledge bases
+- Serve that knowledge through APIs
+- Let users connect their own AI tools
+- Enable sharing or selling access without exposing infrastructure
+
+**RAG is the technical foundation that makes this possible.**
+
+## When RAG is the Right Choice
+
+RAG is especially useful when:
+
+| Scenario | Why RAG Helps |
+|----------|---------------|
+| **Accuracy matters** | Answers are grounded in real documents |
+| **Information must be traceable** | Sources can be cited and audited |
+| **Knowledge changes over time** | Update documents without retraining |
+| **Same information used in many places** | One knowledge base, many applications |
+| **You want control over AI responses** | Constrain what the AI can and cannot say |
+
+This is why RAG is now widely used in research systems, enterprise tools, and knowledge platforms.
+
+## Learn More
+
+<CardGroup cols={2}>
+  <Card title="Knowledge Bases" icon="database" href="/concepts/knowledge-bases">
+    Learn how Ardie structures and stores knowledge for retrieval.
+  </Card>
+  <Card title="API Reference" icon="code" href="/api-reference/introduction">
+    See how to query knowledge bases programmatically.
+  </Card>
+</CardGroup>

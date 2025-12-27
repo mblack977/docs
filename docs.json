@@ -23,6 +23,7 @@
           {
             "group": "Core Concepts",
             "pages": [
+              "concepts/what-is-rag",
               "concepts/knowledge-bases",
               "concepts/api-keys",
               "concepts/pricing-plans"
