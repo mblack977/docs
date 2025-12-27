@@ -3,9 +3,9 @@
   "theme": "mint",
   "name": "Ardie Documentation",
   "colors": {
-    "primary": "#0F172A",
-    "light": "#3B82F6",
-    "dark": "#1E293B"
+    "primary": "#C7A27A",
+    "light": "#D4B896",
+    "dark": "#A8875C"
   },
   "favicon": "/favicon.svg",
   "navigation": {
