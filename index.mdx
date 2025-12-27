@@ -1,11 +1,13 @@
 ---
 title: "Introduction"
-description: "Welcome to Ardie - The Knowledge Base Marketplace"
+description: "Ardie - Knowledge Infrastructure for AI Systems"
 ---
 
 ## What is Ardie?
 
-Ardie is a **knowledge infrastructure platform** that connects you to curated, queryable knowledge bases via API. Browse the marketplace, purchase access to specialized knowledge bases, and integrate them into your applications using scoped API keys.
+Ardie is a **knowledge infrastructure service** that allows individuals and organisations to turn documents, websites, and other authorised sources into **secure, reusable knowledge bases accessed via APIs**.
+
+Instead of locking knowledge into a single chatbot or application, Ardie separates **knowledge ingestion, retrieval, and access control** from user interfaces and language models. Knowledge bases can be queried by websites, internal tools, chat interfaces, agents, and external applications using standard APIs—enabling the same curated knowledge to be reused consistently across many contexts.
 
 <Card
   title="Get Started in 5 Minutes"
@@ -16,62 +18,91 @@ Ardie is a **knowledge infrastructure platform** that connects you to curated, q
   Follow our quickstart guide to make your first API call.
 </Card>
 
-## How It Works
+## The Problem
 
-<Columns cols={2}>
-  <Card
-    title="Browse Knowledge Bases"
-    icon="store"
-    href="/marketplace/browsing"
-  >
-    Explore curated knowledge bases across Education, Policy, Health, Research, and Legal categories.
-  </Card>
-  <Card
-    title="Purchase Access"
-    icon="credit-card"
-    href="/marketplace/purchasing"
-  >
-    Choose a plan that fits your needs with transparent, prepaid pricing.
-  </Card>
-  <Card
-    title="Get Your API Key"
-    icon="key"
-    href="/concepts/api-keys"
-  >
-    Receive a scoped API key that grants access only to your purchased knowledge base.
-  </Card>
-  <Card
-    title="Query via API"
-    icon="terminal"
-    href="/api-reference/introduction"
-  >
-    Send queries and receive answers with citations from authoritative sources.
-  </Card>
-</Columns>
+Organisations increasingly rely on AI systems, but their knowledge is:
 
-## Key Features
+- **Scattered** across documents and websites
+- **Duplicated** across multiple tools
+- **Difficult to control**, audit, and share
+- **Costly** to re-ingest and maintain
+
+Most "chatbot" solutions bundle ingestion, retrieval, and generation together, making knowledge hard to reuse, hard to govern, and expensive to scale.
+
+## How Ardie Solves This
 
 <CardGroup cols={2}>
-  <Card title="Scoped API Keys" icon="shield-check">
-    Every key is Ardie-issued, scoped to a specific knowledge base, and revocable. You never receive supplier infrastructure keys.
+  <Card title="Structured Ingestion" icon="file-import">
+    Transform documents and web sources into queryable knowledge bases with proper indexing and metadata.
   </Card>
-  <Card title="Prepaid Usage Model" icon="gauge">
-    Plans include a fixed number of queries per billing period. No surprise bills—you always know your limits.
+  <Card title="Controlled Access" icon="shield-check">
+    API keys, permissions, and usage limits ensure you control who accesses your knowledge and how much.
   </Card>
-  <Card title="Citations Included" icon="quote-left">
-    Every response includes citations with document titles, excerpts, and page numbers for verification.
+  <Card title="High-Quality Retrieval" icon="magnifying-glass">
+    Vector search with citations and provenance—every answer traces back to its source.
   </Card>
-  <Card title="API-First Design" icon="code">
-    Pure REST API access—integrate knowledge bases into any application, workflow, or automation.
+  <Card title="Flexible Consumption" icon="plug">
+    Use knowledge bases in chatbots, forms, workflows, research tools, or agent systems.
+  </Card>
+  <Card title="Cost Control" icon="gauge">
+    Token-based subscriptions, managed or bring-your-own embedding options, and optional local processing.
+  </Card>
+  <Card title="Marketplace Model" icon="store">
+    Share or sell access to knowledge bases. Consumers pay only for the access and usage they need.
   </Card>
 </CardGroup>
 
-## Ready to Start?
+## Who Is Ardie For?
 
-<Card
-  title="View API Documentation"
-  icon="book"
-  href="/api-reference/introduction"
->
-  Learn how to authenticate and make your first query.
-</Card>
+<Columns cols={3}>
+  <Card title="Organisations" icon="building">
+    Need a reliable knowledge layer for websites, internal tools, and AI systems.
+  </Card>
+  <Card title="Developers" icon="code">
+    Need a clean retrieval API to plug into any RAG pipeline.
+  </Card>
+  <Card title="Content Owners" icon="book">
+    Want to package and license knowledge as a reusable digital asset.
+  </Card>
+</Columns>
+
+## What Makes Ardie Different
+
+<Note>
+**Ardie is not a chatbot.** It is a **knowledge layer** that chatbots and other systems can use.
+</Note>
+
+By decoupling knowledge from presentation and generation, Ardie supports better governance, reuse, and long-term sustainability of AI-powered systems.
+
+## Get Started
+
+<CardGroup cols={2}>
+  <Card
+    title="Quickstart Guide"
+    icon="rocket"
+    href="/quickstart"
+  >
+    Create an account, browse knowledge bases, and make your first API call in 5 minutes.
+  </Card>
+  <Card
+    title="API Documentation"
+    icon="book"
+    href="/api-reference/introduction"
+  >
+    Learn how to authenticate and query knowledge bases programmatically.
+  </Card>
+  <Card
+    title="Browse Marketplace"
+    icon="store"
+    href="/marketplace/browsing"
+  >
+    Explore curated knowledge bases across Education, Policy, Health, Research, and Legal.
+  </Card>
+  <Card
+    title="Core Concepts"
+    icon="lightbulb"
+    href="/concepts/knowledge-bases"
+  >
+    Understand how knowledge bases, API keys, and pricing work.
+  </Card>
+</CardGroup>
