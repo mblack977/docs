@@ -34,6 +34,12 @@
               "marketplace/browsing",
               "marketplace/purchasing"
             ]
+          },
+          {
+            "group": "Resources",
+            "pages": [
+              "resources"
+            ]
           }
         ]
       },
@@ -72,9 +78,9 @@
           "icon": "store"
         },
         {
-          "anchor": "Dashboard",
-          "href": "https://ardie.ai/dashboard",
-          "icon": "gauge"
+          "anchor": "Resources",
+          "href": "/resources",
+          "icon": "book-open"
         }
       ]
     }
